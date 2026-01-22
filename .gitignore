@@ -27,3 +27,18 @@ Thumbs.db
 # Env
 .env
 .env.local
+
+# Config files with API keys
+config.json
+config*.json
+!config.template.json
+
+# Benchmark outputs (contain API keys in config section)
+report.json
+*.report.json
+*_report.json
+benchmark_report.json
+finbench_report.html
+
+# Binary
+finbench
