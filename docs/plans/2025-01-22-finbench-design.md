@@ -38,7 +38,7 @@ FinBench supports 7 major LLM providers, aligned with the nofx trading system.
 | DeepSeek | deepseek-chat | nofx/mcp/deepseek_client.go:10 |
 | Qwen | qwen3-max | nofx/mcp/qwen_client.go:10 |
 | OpenAI | gpt-5.2 | nofx/mcp/openai_client.go:10 |
-| Claude | claude-opus-4-5-20251101 | nofx/mcp/claude_client.go:12 |
+| Claude | claude-opus-4-6 | nofx/mcp/claude_client.go:12 |
 | Gemini | gemini-3-pro-preview | nofx/mcp/gemini_client.go:10 |
 | Grok | grok-3-latest | nofx/mcp/grok_client.go:10 |
 | Kimi | moonshot-v1-auto | nofx/mcp/kimi_client.go:10 |

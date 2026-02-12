@@ -19,7 +19,7 @@ FinBench is a professional LLM benchmarking tool for evaluating the capabilities
 | DeepSeek | deepseek-chat | api.deepseek.com |
 | Qwen | qwen3-max | dashscope.aliyuncs.com |
 | OpenAI | gpt-5.2 | api.openai.com |
-| Claude | claude-opus-4-5-20251101 | api.anthropic.com |
+| Claude | claude-opus-4-6 | api.anthropic.com |
 | Gemini | gemini-3-pro-preview | generativelanguage.googleapis.com |
 | Grok | grok-3-latest | api.x.ai |
 | Kimi | moonshot-v1-auto | api.moonshot.ai |

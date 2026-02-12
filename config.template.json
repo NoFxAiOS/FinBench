@@ -19,9 +19,9 @@
       "api_key": "YOUR_OPENAI_API_KEY"
     },
     {
-      "name": "Claude-Opus-4.5",
+      "name": "Claude-Opus-4.6",
       "provider": "claude",
-      "model": "claude-opus-4-5-20251101",
+      "model": "claude-opus-4-6",
       "api_key": "YOUR_CLAUDE_API_KEY"
     },
     {

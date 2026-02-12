@@ -27,7 +27,7 @@ const (
 	DefaultDeepSeekModel = "deepseek-chat"            // nofx/mcp/deepseek_client.go:10
 	DefaultQwenModel     = "qwen3-max"                // nofx/mcp/qwen_client.go:10
 	DefaultOpenAIModel   = "gpt-5.2"                  // nofx/mcp/openai_client.go:10
-	DefaultClaudeModel   = "claude-opus-4-5-20251101" // nofx/mcp/claude_client.go:12
+	DefaultClaudeModel   = "claude-opus-4-6" // nofx/mcp/claude_client.go:12
 	DefaultGeminiModel   = "gemini-3-pro-preview"     // nofx/mcp/gemini_client.go:10
 	DefaultGrokModel     = "grok-3-latest"            // nofx/mcp/grok_client.go:10
 	DefaultKimiModel     = "moonshot-v1-auto"         // nofx/mcp/kimi_client.go:10
@@ -71,7 +71,7 @@ func GetDefaultModels() []ModelInfo {
 		{
 			Provider:    ProviderClaude,
 			Model:       DefaultClaudeModel,
-			DisplayName: "Claude-Opus-4.5",
+			DisplayName: "Claude-Opus-4.6",
 			BaseURL:     DefaultClaudeBaseURL,
 		},
 		{
