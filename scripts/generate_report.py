@@ -83,11 +83,11 @@ def generate_html_report(data: dict) -> str:
     failed_models = [s['model'] for s in statistics if s.get('avg_score', 0) == 0]
 
     html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FinBench 评测报告</title>
+    <title>FinBench Benchmark Report</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.1.1/dist/chartjs-chart-matrix.min.js"></script>
     <style>
@@ -399,14 +399,14 @@ def generate_html_report(data: dict) -> str:
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🏆 FinBench 评测报告</h1>
-            <p class="subtitle">金融技术指标计算能力大模型评测</p>
+            <h1>FinBench Benchmark Report</h1>
+            <p class="subtitle">Financial Technical Indicator Calculation LLM Benchmark</p>
             <div class="meta">
-                <span class="meta-item">📅 {timestamp[:10]}</span>
-                <span class="meta-item">🔄 每模型 {config.get('runs', 10)} 次运行</span>
-                <span class="meta-item">📊 {len(active_stats)} 个模型参评</span>
-                <span class="meta-item">📈 交易对: {', '.join(config.get('symbols', ['BTCUSDT']))}</span>
-                <span class="meta-item">⏱️ K线周期: {config.get('interval', '1h')}</span>
+                <span class="meta-item">Date: {timestamp[:10]}</span>
+                <span class="meta-item">Runs per Model: {config.get('runs', 10)}</span>
+                <span class="meta-item">Models Tested: {len(active_stats)}</span>
+                <span class="meta-item">Symbols: {', '.join(config.get('symbols', ['BTCUSDT']))}</span>
+                <span class="meta-item">Interval: {config.get('interval', '1h')}</span>
             </div>
         </div>
 
@@ -414,35 +414,35 @@ def generate_html_report(data: dict) -> str:
         <div class="summary-stats">
             <div class="summary-stat">
                 <div class="value">{len(active_stats)}</div>
-                <div class="label">成功评测模型</div>
+                <div class="label">Models Tested</div>
             </div>
             <div class="summary-stat">
                 <div class="value">{max(avg_scores):.1f}</div>
-                <div class="label">最高分</div>
+                <div class="label">Highest Score</div>
             </div>
             <div class="summary-stat">
                 <div class="value">{sum(avg_scores)/len(avg_scores):.1f}</div>
-                <div class="label">平均分</div>
+                <div class="label">Average Score</div>
             </div>
             <div class="summary-stat">
                 <div class="value">{min(latencies):.0f}ms</div>
-                <div class="label">最快响应</div>
+                <div class="label">Fastest Response</div>
             </div>
         </div>
 
         <!-- Leaderboard -->
         <div class="card">
-            <h2 class="card-title">排行榜</h2>
+            <h2 class="card-title">Leaderboard</h2>
             <table class="leaderboard">
                 <thead>
                     <tr>
-                        <th>排名</th>
-                        <th>模型</th>
+                        <th>Rank</th>
+                        <th>Model</th>
                         <th>Provider</th>
-                        <th>平均分</th>
-                        <th>一致性</th>
-                        <th>平均延迟</th>
-                        <th>成功率</th>
+                        <th>Avg Score</th>
+                        <th>Consistency</th>
+                        <th>Avg Latency</th>
+                        <th>Success Rate</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -493,8 +493,8 @@ def generate_html_report(data: dict) -> str:
     if failed_models:
         html += f'''
             <div class="failed-models">
-                <h4>⚠️ 评测失败的模型</h4>
-                <p>{', '.join(failed_models)} - 由于 API 错误或网络问题未能完成评测</p>
+                <h4>Failed Models</h4>
+                <p>{', '.join(failed_models)} - Failed to complete benchmark due to API errors or network issues</p>
             </div>
 '''
 
@@ -504,13 +504,13 @@ def generate_html_report(data: dict) -> str:
         <!-- Charts Row 1 -->
         <div class="grid grid-2">
             <div class="card">
-                <h2 class="card-title">综合得分对比</h2>
+                <h2 class="card-title">Score Comparison</h2>
                 <div class="chart-container">
                     <canvas id="scoreChart"></canvas>
                 </div>
             </div>
             <div class="card">
-                <h2 class="card-title">响应延迟对比</h2>
+                <h2 class="card-title">Latency Comparison</h2>
                 <div class="chart-container">
                     <canvas id="latencyChart"></canvas>
                 </div>
@@ -519,7 +519,7 @@ def generate_html_report(data: dict) -> str:
 
         <!-- Radar Chart -->
         <div class="card">
-            <h2 class="card-title">各指标能力雷达图</h2>
+            <h2 class="card-title">Indicator Capability Radar</h2>
             <div class="chart-container-large">
                 <canvas id="radarChart"></canvas>
             </div>
@@ -528,13 +528,13 @@ def generate_html_report(data: dict) -> str:
         <!-- Charts Row 2 -->
         <div class="grid grid-2">
             <div class="card">
-                <h2 class="card-title">一致性对比</h2>
+                <h2 class="card-title">Consistency Comparison</h2>
                 <div class="chart-container">
                     <canvas id="consistencyChart"></canvas>
                 </div>
             </div>
             <div class="card">
-                <h2 class="card-title">得分分布</h2>
+                <h2 class="card-title">Score Distribution</h2>
                 <div class="chart-container">
                     <canvas id="distributionChart"></canvas>
                 </div>
@@ -543,22 +543,22 @@ def generate_html_report(data: dict) -> str:
 
         <!-- Indicator Heatmap -->
         <div class="card">
-            <h2 class="card-title">指标得分热力图</h2>
+            <h2 class="card-title">Indicator Score Heatmap</h2>
             <div class="chart-container-large">
                 <canvas id="heatmapChart"></canvas>
             </div>
             <div class="heatmap-legend">
-                <div class="legend-item"><span class="legend-color" style="background: #ef4444"></span> 0-20 极差</div>
-                <div class="legend-item"><span class="legend-color" style="background: #f97316"></span> 20-40 差</div>
-                <div class="legend-item"><span class="legend-color" style="background: #eab308"></span> 40-60 一般</div>
-                <div class="legend-item"><span class="legend-color" style="background: #84cc16"></span> 60-80 良好</div>
-                <div class="legend-item"><span class="legend-color" style="background: #22c55e"></span> 80-100 优秀</div>
+                <div class="legend-item"><span class="legend-color" style="background: #ef4444"></span> 0-20 Very Poor</div>
+                <div class="legend-item"><span class="legend-color" style="background: #f97316"></span> 20-40 Poor</div>
+                <div class="legend-item"><span class="legend-color" style="background: #eab308"></span> 40-60 Fair</div>
+                <div class="legend-item"><span class="legend-color" style="background: #84cc16"></span> 60-80 Good</div>
+                <div class="legend-item"><span class="legend-color" style="background: #22c55e"></span> 80-100 Excellent</div>
             </div>
         </div>
 
         <!-- Model Detail Cards -->
         <div class="card">
-            <h2 class="card-title">模型详细分析</h2>
+            <h2 class="card-title">Model Details</h2>
             <div class="grid grid-3">
 '''
 
@@ -570,27 +570,27 @@ def generate_html_report(data: dict) -> str:
                     <h4>{stat['model']}</h4>
                     <div class="stats">
                         <div class="stat">
-                            <div class="stat-label">平均分</div>
+                            <div class="stat-label">Avg Score</div>
                             <div class="stat-value">{stat['avg_score']:.1f}</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-label">标准差</div>
+                            <div class="stat-label">Std Dev</div>
                             <div class="stat-value">{stat['std_dev']:.2f}</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-label">最高分</div>
+                            <div class="stat-label">Max Score</div>
                             <div class="stat-value">{stat['max_score']:.1f}</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-label">最低分</div>
+                            <div class="stat-label">Min Score</div>
                             <div class="stat-value">{stat['min_score']:.1f}</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-label">平均延迟</div>
+                            <div class="stat-label">Avg Latency</div>
                             <div class="stat-value">{stat['avg_latency_ms']:.0f}ms</div>
                         </div>
                         <div class="stat">
-                            <div class="stat-label">一致性</div>
+                            <div class="stat-label">Consistency</div>
                             <div class="stat-value">{stat['consistency']:.1f}%</div>
                         </div>
                     </div>
@@ -603,7 +603,7 @@ def generate_html_report(data: dict) -> str:
 
         <!-- Indicator Analysis -->
         <div class="card">
-            <h2 class="card-title">指标难度分析</h2>
+            <h2 class="card-title">Indicator Difficulty Analysis</h2>
             <div class="chart-container">
                 <canvas id="indicatorDifficultyChart"></canvas>
             </div>
@@ -635,7 +635,7 @@ def generate_html_report(data: dict) -> str:
             data: {{
                 labels: modelNames,
                 datasets: [{{
-                    label: '平均得分',
+                    label: 'Average Score',
                     data: avgScores,
                     backgroundColor: colors,
                     borderColor: borderColors,
@@ -653,7 +653,7 @@ def generate_html_report(data: dict) -> str:
                     y: {{
                         beginAtZero: true,
                         max: 100,
-                        title: {{ display: true, text: '得分' }}
+                        title: {{ display: true, text: 'Score' }}
                     }}
                 }}
             }}
@@ -665,7 +665,7 @@ def generate_html_report(data: dict) -> str:
             data: {{
                 labels: modelNames,
                 datasets: [{{
-                    label: '平均延迟 (ms)',
+                    label: 'Average Latency (ms)',
                     data: latencies,
                     backgroundColor: 'rgba(239, 68, 68, 0.7)',
                     borderColor: 'rgba(239, 68, 68, 1)',
@@ -682,7 +682,7 @@ def generate_html_report(data: dict) -> str:
                 scales: {{
                     y: {{
                         beginAtZero: true,
-                        title: {{ display: true, text: '延迟 (ms)' }}
+                        title: {{ display: true, text: 'Latency (ms)' }}
                     }}
                 }}
             }}
@@ -735,7 +735,7 @@ def generate_html_report(data: dict) -> str:
                     }},
                     title: {{
                         display: true,
-                        text: '一致性分布 (%)'
+                        text: 'Consistency Distribution (%)'
                     }}
                 }}
             }}
@@ -747,7 +747,7 @@ def generate_html_report(data: dict) -> str:
             data: {{
                 labels: modelNames,
                 datasets: [{{
-                    label: '得分范围',
+                    label: 'Score Range',
                     data: {json.dumps([{'min': s['min_score'], 'max': s['max_score'], 'avg': s['avg_score']} for s in active_stats])}.map(d => d.avg),
                     backgroundColor: colors.map(c => c.replace('0.8', '0.5')),
                     borderColor: borderColors,
@@ -765,7 +765,7 @@ def generate_html_report(data: dict) -> str:
                             label: function(context) {{
                                 const stats = {json.dumps([{'min': s['min_score'], 'max': s['max_score'], 'avg': s['avg_score'], 'std': s['std_dev']} for s in active_stats])};
                                 const s = stats[context.dataIndex];
-                                return [`平均: ${{s.avg.toFixed(1)}}`, `范围: ${{s.min.toFixed(1)}} - ${{s.max.toFixed(1)}}`, `标准差: ${{s.std.toFixed(2)}}`];
+                                return [`Average: ${{s.avg.toFixed(1)}}`, `Range: ${{s.min.toFixed(1)}} - ${{s.max.toFixed(1)}}`, `Std Dev: ${{s.std.toFixed(2)}}`];
                             }}
                         }}
                     }}
@@ -774,7 +774,7 @@ def generate_html_report(data: dict) -> str:
                     y: {{
                         beginAtZero: true,
                         max: 100,
-                        title: {{ display: true, text: '得分' }}
+                        title: {{ display: true, text: 'Score' }}
                     }}
                 }}
             }}
@@ -791,7 +791,7 @@ def generate_html_report(data: dict) -> str:
             data: {{
                 labels: indicatorLabels,
                 datasets: [{{
-                    label: '平均得分',
+                    label: 'Average Score',
                     data: indicatorAvgs,
                     backgroundColor: indicatorAvgs.map(v => {{
                         if (v >= 80) return 'rgba(34, 197, 94, 0.7)';
@@ -812,7 +812,7 @@ def generate_html_report(data: dict) -> str:
                     legend: {{ display: false }},
                     title: {{
                         display: true,
-                        text: '各指标平均得分 (越低越难)'
+                        text: 'Average Score by Indicator (Lower = Harder)'
                     }}
                 }},
                 scales: {{
@@ -830,7 +830,7 @@ def generate_html_report(data: dict) -> str:
             type: 'matrix',
             data: {{
                 datasets: [{{
-                    label: '得分',
+                    label: 'Score',
                     data: heatmapData,
                     backgroundColor: function(ctx) {{
                         const v = ctx.dataset.data[ctx.dataIndex].v;
@@ -902,8 +902,8 @@ def main():
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write(html)
 
-    print(f"✅ Report generated: {output_path}")
-    print(f"   Open in browser to view the interactive report.")
+    print(f"Report generated: {output_path}")
+    print(f"Open in browser to view the interactive report.")
 
 if __name__ == '__main__':
     main()

@@ -12,14 +12,14 @@ import (
 	"time"
 )
 
-// 阿里云 API 配置
+// Alibaba Cloud API Configuration
 const (
 	DefaultQwenBaseURL = "https://dashscope.aliyuncs.com/api/v1/apps"
-	// 标准 OpenAI 兼容模式 API
+	// Standard OpenAI Compatible Mode API
 	QwenCompatibleURL = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 )
 
-// QwenAgent 阿里云百炼智能体客户端
+// QwenAgent is the Alibaba Cloud Bailian Agent Client
 type QwenAgent struct {
 	AppID     string
 	APIKey    string
@@ -28,25 +28,25 @@ type QwenAgent struct {
 	Client    *http.Client
 }
 
-// QwenRequest 请求结构
+// QwenRequest represents the request structure
 type QwenRequest struct {
 	Input      QwenInput      `json:"input"`
 	Parameters QwenParameters `json:"parameters,omitempty"`
 }
 
-// QwenInput 输入结构
+// QwenInput represents the input structure
 type QwenInput struct {
 	Prompt    string                 `json:"prompt"`
 	BizParams map[string]interface{} `json:"biz_params,omitempty"`
 }
 
-// QwenParameters 参数结构
+// QwenParameters represents the parameters structure
 type QwenParameters struct {
 	SessionID         string `json:"session_id,omitempty"`
 	IncrementalOutput bool   `json:"incremental_output,omitempty"`
 }
 
-// QwenResponse 响应结构
+// QwenResponse represents the response structure
 type QwenResponse struct {
 	Output    QwenOutput `json:"output"`
 	Usage     QwenUsage  `json:"usage,omitempty"`
@@ -55,21 +55,21 @@ type QwenResponse struct {
 	Message   string     `json:"message,omitempty"`
 }
 
-// QwenOutput 输出结构
+// QwenOutput represents the output structure
 type QwenOutput struct {
 	Text         string `json:"text"`
 	FinishReason string `json:"finish_reason,omitempty"`
 	SessionID    string `json:"session_id,omitempty"`
 }
 
-// QwenUsage 用量统计
+// QwenUsage represents usage statistics
 type QwenUsage struct {
 	InputTokens  int `json:"input_tokens"`
 	OutputTokens int `json:"output_tokens"`
 	TotalTokens  int `json:"total_tokens"`
 }
 
-// NewQwenAgent 创建新的智能体客户端
+// NewQwenAgent creates a new agent client
 func NewQwenAgent(appID, apiKey string) *QwenAgent {
 	return &QwenAgent{
 		AppID:   appID,
@@ -81,7 +81,7 @@ func NewQwenAgent(appID, apiKey string) *QwenAgent {
 	}
 }
 
-// Chat 同步对话
+// Chat performs synchronous conversation
 func (a *QwenAgent) Chat(ctx context.Context, prompt string) (*QwenResponse, error) {
 	reqBody := QwenRequest{
 		Input: QwenInput{
@@ -122,12 +122,12 @@ func (a *QwenAgent) Chat(ctx context.Context, prompt string) (*QwenResponse, err
 		return nil, fmt.Errorf("unmarshal response failed: %w, body: %s", err, string(body))
 	}
 
-	// 更新 session_id 用于多轮对话
+	// Update session_id for multi-turn conversation
 	if result.Output.SessionID != "" {
 		a.SessionID = result.Output.SessionID
 	}
 
-	// 检查 API 错误
+	// Check for API errors
 	if result.Code != "" {
 		return &result, fmt.Errorf("API error: code=%s, message=%s", result.Code, result.Message)
 	}
@@ -135,7 +135,7 @@ func (a *QwenAgent) Chat(ctx context.Context, prompt string) (*QwenResponse, err
 	return &result, nil
 }
 
-// ChatStream 流式对话
+// ChatStream performs streaming conversation
 func (a *QwenAgent) ChatStream(ctx context.Context, prompt string, callback func(chunk string)) error {
 	reqBody := QwenRequest{
 		Input: QwenInput{
@@ -189,12 +189,12 @@ func (a *QwenAgent) ChatStream(ctx context.Context, prompt string, callback func
 			continue
 		}
 
-		// 更新 session_id
+		// Update session_id
 		if chunk.Output.SessionID != "" {
 			a.SessionID = chunk.Output.SessionID
 		}
 
-		// 回调输出文本
+		// Callback with output text
 		if chunk.Output.Text != "" {
 			callback(chunk.Output.Text)
 		}
@@ -203,7 +203,7 @@ func (a *QwenAgent) ChatStream(ctx context.Context, prompt string, callback func
 	return nil
 }
 
-// ChatWithBizParams 带业务参数的对话
+// ChatWithBizParams performs conversation with business parameters
 func (a *QwenAgent) ChatWithBizParams(ctx context.Context, prompt string, bizParams map[string]interface{}) (*QwenResponse, error) {
 	reqBody := QwenRequest{
 		Input: QwenInput{
@@ -256,26 +256,26 @@ func (a *QwenAgent) ChatWithBizParams(ctx context.Context, prompt string, bizPar
 	return &result, nil
 }
 
-// ResetSession 重置会话
+// ResetSession resets the conversation session
 func (a *QwenAgent) ResetSession() {
 	a.SessionID = ""
 }
 
-// ========== 标准 OpenAI 兼容 API ==========
+// ========== Standard OpenAI Compatible API ==========
 
-// ChatCompletionRequest OpenAI 兼容格式请求
+// ChatCompletionRequest represents OpenAI compatible format request
 type ChatCompletionRequest struct {
-	Model    string                   `json:"model"`
-	Messages []ChatCompletionMessage  `json:"messages"`
+	Model    string                  `json:"model"`
+	Messages []ChatCompletionMessage `json:"messages"`
 }
 
-// ChatCompletionMessage 消息结构
+// ChatCompletionMessage represents the message structure
 type ChatCompletionMessage struct {
 	Role    string `json:"role"`
 	Content string `json:"content"`
 }
 
-// ChatCompletionResponse OpenAI 兼容格式响应
+// ChatCompletionResponse represents OpenAI compatible format response
 type ChatCompletionResponse struct {
 	ID      string `json:"id"`
 	Model   string `json:"model"`
@@ -297,7 +297,7 @@ type ChatCompletionResponse struct {
 	} `json:"error,omitempty"`
 }
 
-// ChatWithModel 使用标准 OpenAI 兼容 API 调用指定模型
+// ChatWithModel uses the standard OpenAI compatible API to call a specified model
 func (a *QwenAgent) ChatWithModel(ctx context.Context, model, prompt string) (*ChatCompletionResponse, error) {
 	reqBody := ChatCompletionRequest{
 		Model: model,
@@ -342,7 +342,7 @@ func (a *QwenAgent) ChatWithModel(ctx context.Context, model, prompt string) (*C
 	return &result, nil
 }
 
-// GetContent 从响应中获取内容
+// GetContent extracts content from the response
 func (r *ChatCompletionResponse) GetContent() string {
 	if len(r.Choices) > 0 {
 		return r.Choices[0].Message.Content

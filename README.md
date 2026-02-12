@@ -1,21 +1,21 @@
 # FinBench
 
-**金融技术指标计算能力大模型评测基准**
+**Financial Technical Indicator Calculation LLM Benchmark**
 
-FinBench 是一个专业的 LLM 评测工具，用于评估大语言模型在金融技术指标计算方面的能力。通过标准化的评测流程，为 AI 量化交易系统提供模型选型依据。
+FinBench is a professional LLM benchmarking tool for evaluating the capabilities of large language models in calculating financial technical indicators. Through standardized evaluation processes, it provides model selection guidance for AI quantitative trading systems.
 
-## 特性
+## Features
 
-- **多模型支持** - 支持 7 大主流 LLM 提供商
-- **10 项指标评测** - 覆盖常用技术分析指标
-- **统计分析** - 多次运行获取稳定性数据
-- **可视化报告** - 生成专业 HTML 图表报告
-- **可复现性** - 支持静态数据集模式
+- **Multi-Model Support** - Supports 7 major LLM providers
+- **10 Indicator Tests** - Covers common technical analysis indicators
+- **Statistical Analysis** - Multiple runs for stability data
+- **Visual Reports** - Generates professional HTML chart reports
+- **Reproducibility** - Supports static dataset mode
 
-## 支持的模型
+## Supported Models
 
-| Provider | 模型 | API 端点 |
-|----------|------|----------|
+| Provider | Model | API Endpoint |
+|----------|-------|--------------|
 | DeepSeek | deepseek-chat | api.deepseek.com |
 | Qwen | qwen3-max | dashscope.aliyuncs.com |
 | OpenAI | gpt-5.2 | api.openai.com |
@@ -24,32 +24,32 @@ FinBench 是一个专业的 LLM 评测工具，用于评估大语言模型在金
 | Grok | grok-3-latest | api.x.ai |
 | Kimi | moonshot-v1-auto | api.moonshot.ai |
 
-## 评测指标
+## Evaluation Indicators
 
-| 指标 | 说明 | 评分阈值 |
-|------|------|----------|
-| MA20 | 20周期简单移动平均 | ≤0.1% 满分 |
-| EMA12 | 12周期指数移动平均 | ≤0.1% 满分 |
-| EMA26 | 26周期指数移动平均 | ≤0.1% 满分 |
-| MACD | EMA12 - EMA26 | ≤0.5% 满分 |
-| RSI14 | 14周期相对强弱指数 | ≤1% 满分 |
-| BOLL | 布林带 (上/中/下轨) | ≤0.1% 满分 |
-| ATR14 | 14周期平均真实波幅 | ≤1% 满分 |
-| VolumeMA5 | 5周期成交量均值 | ≤0.1% 满分 |
+| Indicator | Description | Score Threshold |
+|-----------|-------------|-----------------|
+| MA20 | 20-period Simple Moving Average | ≤0.1% full score |
+| EMA12 | 12-period Exponential Moving Average | ≤0.1% full score |
+| EMA26 | 26-period Exponential Moving Average | ≤0.1% full score |
+| MACD | EMA12 - EMA26 | ≤0.5% full score |
+| RSI14 | 14-period Relative Strength Index | ≤1% full score |
+| BOLL | Bollinger Bands (Upper/Middle/Lower) | ≤0.1% full score |
+| ATR14 | 14-period Average True Range | ≤1% full score |
+| VolumeMA5 | 5-period Volume Moving Average | ≤0.1% full score |
 
-### 评分规则
+### Scoring Rules
 
-| 误差范围 | 得分 |
-|----------|------|
+| Error Range | Score |
+|-------------|-------|
 | ≤ 0.1% | 100 |
 | 0.1% - 1% | 80 |
 | 1% - 5% | 60 |
 | 5% - 10% | 40 |
 | > 10% | 0 |
 
-## 快速开始
+## Quick Start
 
-### 安装
+### Installation
 
 ```bash
 git clone https://github.com/NoFxAiOS/FinBench.git
@@ -57,15 +57,15 @@ cd FinBench
 go build -o finbench ./cmd/finbench
 ```
 
-### 配置
+### Configuration
 
-复制配置模板并填入 API Keys：
+Copy the configuration template and fill in API Keys:
 
 ```bash
 cp config.template.json config.json
 ```
 
-编辑 `config.json`：
+Edit `config.json`:
 
 ```json
 {
@@ -80,124 +80,124 @@ cp config.template.json config.json
 }
 ```
 
-### 运行评测
+### Running Benchmarks
 
 ```bash
-# 标准评测 (10次运行)
+# Standard benchmark (10 runs)
 ./finbench run -config=config.json -symbols=BTCUSDT -runs=10 -output=report.json
 
-# 快速评测 (3次运行)
+# Quick benchmark (3 runs)
 ./finbench run -config=config.json -symbols=BTCUSDT -runs=3
 
-# 多交易对评测
+# Multi-symbol benchmark
 ./finbench run -config=config.json -symbols=BTCUSDT,ETHUSDT -runs=10
 
-# 使用静态数据集 (可复现)
+# Using static dataset (reproducible)
 ./finbench run -mode=static -dataset=datasets/snapshots -config=config.json
 ```
 
-### 生成可视化报告
+### Generating Visual Reports
 
 ```bash
 python3 scripts/generate_report.py report.json finbench_report.html
 open finbench_report.html
 ```
 
-## 命令参考
+## Command Reference
 
 ```bash
-# 查看支持的模型
+# View supported models
 ./finbench models
 
-# 捕获市场数据快照
+# Capture market data snapshot
 ./finbench snapshot -symbols=BTCUSDT,ETHUSDT -output=datasets/snapshots
 
-# 查看帮助
+# View help
 ./finbench help
 ```
 
-### Run 命令参数
+### Run Command Parameters
 
-| 参数 | 说明 | 默认值 |
-|------|------|--------|
-| `-config` | 配置文件路径 | 必填 |
-| `-mode` | 评测模式 (realtime/static) | realtime |
-| `-symbols` | 交易对 (逗号分隔) | BTCUSDT |
-| `-interval` | K线周期 | 1h |
-| `-klines` | K线数量 | 50 |
-| `-runs` | 每模型运行次数 | 1 |
-| `-output` | 输出报告路径 | - |
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| `-config` | Configuration file path | Required |
+| `-mode` | Benchmark mode (realtime/static) | realtime |
+| `-symbols` | Trading pairs (comma-separated) | BTCUSDT |
+| `-interval` | Kline interval | 1h |
+| `-klines` | Number of klines | 50 |
+| `-runs` | Runs per model | 1 |
+| `-output` | Output report path | - |
 
-## 报告示例
+## Report Examples
 
-HTML 报告包含：
+HTML reports include:
 
-- 🏆 **排行榜** - 模型综合排名
-- 📊 **得分柱状图** - 直观对比
-- 🎯 **雷达图** - 各指标能力分析
-- 🔥 **热力图** - 指标得分矩阵
-- 📈 **延迟对比** - 响应速度分析
-- 📋 **详细卡片** - 每模型统计数据
+- **Leaderboard** - Overall model rankings
+- **Score Bar Chart** - Visual comparison
+- **Radar Chart** - Indicator capability analysis
+- **Heatmap** - Indicator score matrix
+- **Latency Comparison** - Response speed analysis
+- **Detail Cards** - Per-model statistics
 
-## 评测原理
+## Evaluation Methodology
 
 ```
 ┌─────────────────────────────────────────┐
-│           统一数据源 (K线)               │
-│      CoinAnk API / 静态快照              │
+│         Unified Data Source (Klines)    │
+│        CoinAnk API / Static Snapshots   │
 └─────────────────┬───────────────────────┘
                   │
         ┌─────────┴─────────┐
         ▼                   ▼
 ┌───────────────┐   ┌───────────────┐
-│   本地计算     │   │   LLM 计算    │
-│  (标准答案)    │   │  (待评测)     │
+│ Local Calc    │   │  LLM Calc     │
+│ (Ground Truth)│   │ (Under Test)  │
 └───────┬───────┘   └───────┬───────┘
         │                   │
         └─────────┬─────────┘
                   ▼
         ┌───────────────────┐
-        │     对比评分       │
-        │   误差 → 得分      │
+        │   Compare & Score │
+        │   Error → Score   │
         └───────────────────┘
 ```
 
-## 项目结构
+## Project Structure
 
 ```
 FinBench/
-├── cmd/finbench/       # CLI 入口
-├── benchmark/          # 评测引擎
-│   ├── engine.go       # 主引擎
-│   ├── llm.go          # LLM 客户端
-│   ├── models.go       # 模型配置
-│   ├── scorer.go       # 评分逻辑
-│   └── calculator.go   # 指标计算
-├── market/             # 市场数据
-│   ├── kline.go        # K线获取
-│   └── indicators.go   # 指标实现
-├── provider/           # 数据提供商
+├── cmd/finbench/       # CLI entry point
+├── benchmark/          # Benchmark engine
+│   ├── engine.go       # Main engine
+│   ├── llm.go          # LLM client
+│   ├── models.go       # Model configuration
+│   ├── scorer.go       # Scoring logic
+│   └── calculator.go   # Indicator calculation
+├── market/             # Market data
+│   ├── kline.go        # Kline fetching
+│   └── indicators.go   # Indicator implementation
+├── provider/           # Data providers
 │   └── coinank/        # CoinAnk API
-├── scripts/            # 工具脚本
-│   └── generate_report.py  # 报告生成器
-├── datasets/           # 数据集
-│   └── snapshots/      # 快照数据
-└── docs/               # 文档
+├── scripts/            # Utility scripts
+│   └── generate_report.py  # Report generator
+├── datasets/           # Datasets
+│   └── snapshots/      # Snapshot data
+└── docs/               # Documentation
 ```
 
-## 安全说明
+## Security Notice
 
-⚠️ **请勿提交含有 API Key 的文件**
+**Do not commit files containing API Keys**
 
-以下文件已被 `.gitignore` 忽略：
-- `config.json` / `config*.json` (除 template)
+The following files are ignored by `.gitignore`:
+- `config.json` / `config*.json` (except template)
 - `*_report.json` / `report.json`
 - `finbench_report.html`
 
-## 许可证
+## License
 
 MIT License
 
-## 相关项目
+## Related Projects
 
-- [nofx](https://github.com/NoFxAiOS/nofx) - AI 量化交易系统
+- [nofx](https://github.com/NoFxAiOS/nofx) - AI Quantitative Trading System
